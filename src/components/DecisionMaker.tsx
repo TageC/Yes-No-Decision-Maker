@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 
 export default function DecisionMaker() {
@@ -40,142 +38,259 @@ export default function DecisionMaker() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>Decision Maker</h1>
-
-        <div style={styles.inputWrapper}>
-          <input
-            type="text"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask a yes or no question..."
-            disabled={loading}
-            style={styles.input}
-          />
+    <div style={styles.pageWrapper}>
+      {/* Header */}
+      <header style={styles.header}>
+        <div style={styles.headerContent}>
+          <h1 style={styles.headerTitle}>Decision Maker</h1>
+          <p style={styles.headerSubtitle}>
+            Get instant answers to your yes or no questions
+          </p>
         </div>
+      </header>
 
-        <div style={styles.answerContainer}>
-          {loading && <p style={styles.loading}>Deciding...</p>}
-          {answer && !loading && (
-            <div style={styles.answerBox}>
-              <p style={styles.answer}>{answer}</p>
-              <p style={styles.emoji}>{answer === "YES" ? "✅" : "❌"}</p>
+      {/* Main Content */}
+      <main style={styles.mainContent}>
+        <div style={styles.cardContainer}>
+          {/* Input Section */}
+          <div style={styles.section}>
+            <label style={styles.label}>Your Question</label>
+            <input
+              type="text"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask a yes or no question..."
+              disabled={loading}
+              style={styles.input}
+            />
+          </div>
+
+          {/* Answer Section */}
+          <div style={styles.section}>
+            <label style={styles.label}>Answer</label>
+            <div style={styles.answerDisplay}>
+              {loading && (
+                <div style={styles.loadingState}>
+                  <p style={styles.loadingText}>Processing...</p>
+                </div>
+              )}
+
+              {answer && !loading && (
+                <div style={styles.answerResult}>
+                  <div
+                    style={{
+                      ...styles.answerBox,
+                      backgroundColor:
+                        answer === "YES" ? "#1D3557" : "#E63946",
+                    }}
+                  >
+                    <p style={styles.answerText}>{answer}</p>
+                  </div>
+                  <p style={styles.answerEmoji}>
+                    {answer === "YES" ? "✓" : "✕"}
+                  </p>
+                </div>
+              )}
+
+              {!answer && !loading && (
+                <div style={styles.emptyState}>
+                  <p style={styles.emptyStateText}>
+                    Ask a question to get started
+                  </p>
+                </div>
+              )}
             </div>
-          )}
-          {!answer && !loading && (
-            <p style={styles.placeholder}>Ask a question</p>
-          )}
-        </div>
+          </div>
 
-        <div style={styles.buttonWrapper}>
-          <button
-            onClick={handleDecide}
-            disabled={!question.trim() || loading}
-            style={{
-              ...styles.button,
-              ...styles.primaryButton,
-              opacity: !question.trim() || loading ? 0.5 : 1,
-            }}
-          >
-            Decide
-          </button>
-          <button
-            onClick={handleReset}
-            disabled={loading}
-            style={{
-              ...styles.button,
-              ...styles.secondaryButton,
-              opacity: loading ? 0.5 : 1,
-            }}
-          >
-            Reset
-          </button>
+          {/* Actions Section */}
+          <div style={styles.section}>
+            <div style={styles.buttonGroup}>
+              <button
+                onClick={handleDecide}
+                disabled={!question.trim() || loading}
+                style={{
+                  ...styles.button,
+                  ...styles.primaryButton,
+                  opacity: !question.trim() || loading ? 0.5 : 1,
+                  cursor:
+                    !question.trim() || loading
+                      ? "not-allowed"
+                      : "pointer",
+                }}
+              >
+                Get Answer
+              </button>
+              <button
+                onClick={handleReset}
+                disabled={loading}
+                style={{
+                  ...styles.button,
+                  ...styles.secondaryButton,
+                  opacity: loading ? 0.5 : 1,
+                  cursor: loading ? "not-allowed" : "pointer",
+                }}
+              >
+                Clear
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer style={styles.footer}>
+        <p style={styles.footerText}>
+          © 2025 Decision Maker. Simple. Reliable. Clear.
+        </p>
+      </footer>
     </div>
   );
 }
 
 const styles = {
-  container: {
+  pageWrapper: {
     minHeight: "100vh",
+    backgroundColor: "#F0F4F8",
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "1rem",
-    backgroundColor: "#ffffff",
-  } as React.CSSProperties,
-  card: {
-    width: "100%",
-    maxWidth: "400px",
-    border: "1px solid #000000",
+    flexDirection: "column" as const,
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  },
+  header: {
+    backgroundColor: "#FFFFFF",
+    borderBottom: "1px solid #E8EEF5",
+    padding: "3rem 2rem",
+  },
+  headerContent: {
+    maxWidth: "600px",
+    margin: "0 auto",
+  },
+  headerTitle: {
+    fontSize: "2rem",
+    fontWeight: 700,
+    color: "#1D3557",
+    margin: 0,
+    marginBottom: "0.5rem",
+  },
+  headerSubtitle: {
+    fontSize: "1rem",
+    color: "#546B82",
+    margin: 0,
+    fontWeight: 400,
+  },
+  mainContent: {
+    flex: 1,
+    padding: "3rem 2rem",
+  },
+  cardContainer: {
+    maxWidth: "600px",
+    margin: "0 auto",
+    backgroundColor: "#FFFFFF",
     padding: "2rem",
-  } as React.CSSProperties,
-  title: {
-    fontSize: "1.5rem",
-    fontWeight: "bold",
-    marginBottom: "1.5rem",
-    color: "#000000",
-  } as React.CSSProperties,
-  inputWrapper: {
-    marginBottom: "1.5rem",
-  } as React.CSSProperties,
+    border: "1px solid #E8EEF5",
+  },
+  section: {
+    marginBottom: "2rem",
+  },
+  label: {
+    display: "block",
+    fontSize: "0.875rem",
+    fontWeight: 600,
+    color: "#1D3557",
+    marginBottom: "0.75rem",
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.05em",
+  },
   input: {
     width: "100%",
-    padding: "0.75rem",
-    border: "1px solid #000000",
+    padding: "1rem",
     fontSize: "1rem",
-    boxSizing: "border-box",
+    border: "1px solid #D1D9E0",
+    backgroundColor: "#F0F4F8",
+    boxSizing: "border-box" as const,
     fontFamily: "inherit",
-  } as React.CSSProperties,
-  answerContainer: {
-    minHeight: "80px",
+    color: "#1D3557",
+  },
+  answerDisplay: {
+    minHeight: "120px",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: "1.5rem",
-  } as React.CSSProperties,
-  loading: {
-    color: "#000000",
-    fontSize: "1rem",
-  } as React.CSSProperties,
-  answerBox: {
+    backgroundColor: "#F0F4F8",
+    border: "1px solid #D1D9E0",
+    padding: "1rem",
+  },
+  loadingState: {
     textAlign: "center" as const,
-  } as React.CSSProperties,
-  answer: {
-    fontSize: "3rem",
-    fontWeight: "bold",
-    color: "#000000",
-    marginBottom: "0.5rem",
-  } as React.CSSProperties,
-  emoji: {
-    fontSize: "1.5rem",
-  } as React.CSSProperties,
-  placeholder: {
-    color: "#999999",
-    fontSize: "0.875rem",
-  } as React.CSSProperties,
-  buttonWrapper: {
-    display: "flex",
-    gap: "0.5rem",
-  } as React.CSSProperties,
-  button: {
-    padding: "0.75rem 1rem",
-    fontWeight: "bold",
+  },
+  loadingText: {
     fontSize: "1rem",
-    border: "1px solid #000000",
+    color: "#546B82",
+    margin: 0,
+  },
+  answerResult: {
+    textAlign: "center" as const,
+    width: "100%",
+  },
+  answerBox: {
+    padding: "1.5rem",
+    marginBottom: "1rem",
+  },
+  answerText: {
+    fontSize: "2rem",
+    fontWeight: 700,
+    color: "#FFFFFF",
+    margin: 0,
+    letterSpacing: "0.1em",
+  },
+  answerEmoji: {
+    fontSize: "1.5rem",
+    margin: 0,
+  },
+  emptyState: {
+    textAlign: "center" as const,
+  },
+  emptyStateText: {
+    fontSize: "0.95rem",
+    color: "#8899AA",
+    margin: 0,
+    fontWeight: 400,
+  },
+  buttonGroup: {
+    display: "flex",
+    gap: "1rem",
+  },
+  button: {
+    flex: 1,
+    padding: "1rem",
+    fontSize: "1rem",
+    fontWeight: 600,
+    border: "none",
     cursor: "pointer",
     fontFamily: "inherit",
-  } as React.CSSProperties,
+    transition: "none",
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.05em",
+  },
   primaryButton: {
-    flex: 1,
-    backgroundColor: "#000000",
-    color: "#ffffff",
-  } as React.CSSProperties,
+    backgroundColor: "#1D3557",
+    color: "#FFFFFF",
+  },
   secondaryButton: {
-    backgroundColor: "#ffffff",
-    color: "#000000",
-  } as React.CSSProperties,
+    backgroundColor: "#F0F4F8",
+    color: "#1D3557",
+    border: "1px solid #D1D9E0",
+  },
+  footer: {
+    backgroundColor: "#FFFFFF",
+    borderTop: "1px solid #E8EEF5",
+    padding: "2rem",
+    textAlign: "center" as const,
+  },
+  footerText: {
+    fontSize: "0.875rem",
+    color: "#8899AA",
+    margin: 0,
+  },
 };
